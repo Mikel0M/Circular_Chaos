@@ -9,8 +9,6 @@ import os
 import createWall as CW
 from tools import ifchelper
 import json
-import CChaos
-import uuid
 ##################### STREAMLIT IFC-JS COMPONENT MAGIC ######################
 from pathlib import Path  #
 from re import L  #
@@ -303,9 +301,9 @@ def main():
     ##Adds a button to run Code:
     runButton = st.sidebar.button(label="RUN", key="RunButton")
     if runButton:
-        # print(pd.read_csv('DataList.csv'))
-        df = pd.read_csv("Datalist.csv")
-
+        # creates a dataframe from the csv list
+        df = pd.read_csv(ListOfObjects)
+        #Prepare a list to put every single component of the objects of the list
         completeListParts = []
         # Create Objects acording to the list using the sortingFunctios
         for n in range(len(df.index)):
@@ -374,21 +372,23 @@ def main():
                     ifc_file.remove(wall)
                     break  # Assuming only one wall matches the criteria
 
-        # Optionally delete an existing wall
-        delete_existing_wall(model, wall_name_to_delete)
-
-        coordinates = (0.0, 0.0, 0.0)  # starting wall
+        ##coordinates = (2.0, 0.0, 0.0)  # starting wall
         x_dim = 5.0  # Length of the wall in meters
         y_dim = 0.1  # Thickness of the wall in meters
         depth = 2.65  # Height of the wall in meters
         lengthCoordinate = 0.0
         # Add a new wall
+        start = 0.0
         for element in listNewElements:
+            coordinates =(float((element.getWidth()/2)/100+start),0.0,0.0)
             # CW.add_new_wall(model, coordinates, x_dim, y_dim, depth)
             totalLength += float(element.getWidth())
-            CW.add_new_wall(model, coordinates, element.getWidth() / 100, element.getDepth() / 100,
-                            element.getHeight() / 100)
+            CW.add_new_wall(model, coordinates, element.getWidth()/100, element.getDepth()/100,
+                            element.getHeight()/100)
+            start+=float((element.getWidth())/100)
 
+        # delete the element that is going to be replaced
+        delete_existing_wall(model, wall_name_to_delete)
         # Overwrite the IFC file with the new changes
         # model.write('ifcTest.ifc')  # This overwrites the original file
         # Example for Windows, adjust the path as necessary
