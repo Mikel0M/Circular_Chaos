@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import ifcopenshell
 import uuid
 
@@ -94,7 +93,7 @@ def find_wall_orientation_by_name(model, wall_name):
 
 
 # Find and print the orientation vectors of the specified wall
-=======
+
 import ifcopenshell
 import uuid
 
@@ -190,4 +189,4 @@ def find_wall_orientation_by_name(model, wall_name):
 
 
 # Find and print the orientation vectors of the specified wall
->>>>>>> dfdc32efe8ee665d60f8a66a43be634f80bcc1b1
+
